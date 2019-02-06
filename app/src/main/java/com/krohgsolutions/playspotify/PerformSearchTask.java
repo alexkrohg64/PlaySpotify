@@ -14,11 +14,10 @@ class PerformSearchTask extends AsyncTask<String, Integer, String> {
     protected String doInBackground(String... urls) {
         try {
             Log.d("MainActivity","Executing Search for Random Track");
-            URL url = new URL("https://api.spotify.com/v1/search/?q=name:gold&type=track&market=from_token");
+            URL url = new URL("https://api.spotify.com/v1/search/?q=name%3Agold%26type=track%26market=from_token");
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             connection.setRequestProperty ("Authorization", MainActivity.getAuthToken());
             connection.setRequestMethod("GET");
-            connection.connect();
             Log.d("MainActivity", connection.getResponseCode() + "");
             BufferedReader rd = new BufferedReader(new InputStreamReader(connection.getInputStream()));
             String content = "";
