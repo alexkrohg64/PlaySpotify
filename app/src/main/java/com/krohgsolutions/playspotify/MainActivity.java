@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+
 import com.spotify.android.appremote.api.ConnectionParams;
 import com.spotify.android.appremote.api.Connector;
 import com.spotify.android.appremote.api.SpotifyAppRemote;
@@ -22,6 +24,7 @@ public class MainActivity extends AppCompatActivity {
     // Request code will be used to verify if result comes from the login activity. Can be set to any integer.
     private static final int REQUEST_CODE = 1337;
     private static String AUTH_TOKEN = null;
+    private static String spotifyURI = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
         AuthenticationRequest.Builder builder =
                 new AuthenticationRequest.Builder(CLIENT_ID, AuthenticationResponse.Type.TOKEN, REDIRECT_URI);
 
-        builder.setScopes(new String[]{"streaming"});
+        builder.setScopes(new String[]{"user-read-private"});
         AuthenticationRequest request = builder.build();
 
         AuthenticationClient.openLoginActivity(this, REQUEST_CODE, request);
@@ -71,6 +74,14 @@ public class MainActivity extends AppCompatActivity {
     }
 
     protected static String getAuthToken() { return AUTH_TOKEN; }
+
+    protected static void setSpotifyURI(String uri) {spotifyURI = uri;}
+
+    public void playNextRandomSong(View v) {
+        mSpotifyAppRemote.getPlayerApi().play(spotifyURI);
+
+        new PerformSearchTask().execute("");
+    }
 
     @Override
     protected void onStop() {

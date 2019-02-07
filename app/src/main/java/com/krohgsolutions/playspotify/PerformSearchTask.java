@@ -9,16 +9,18 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.concurrent.ThreadLocalRandom;
 
 class PerformSearchTask extends AsyncTask<String, Integer, String> {
     protected String doInBackground(String... urls) {
         try {
-            Log.d("MainActivity","Executing Search for Random Track");
-            URL url = new URL("https://api.spotify.com/v1/search/?q=name%3Agold%26type=track%26market=from_token");
+            Log.d("PerformSearchTask","Executing Search for Random Track");
+            int offset = ThreadLocalRandom.current().nextInt(0, 10000);
+            URL url = new URL("https://api.spotify.com/v1/search/?q=name:*&type=track&market=from_token&limit=1&offset=" + offset);
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-            connection.setRequestProperty ("Authorization", MainActivity.getAuthToken());
+            connection.setRequestProperty ("Authorization", "Bearer " + MainActivity.getAuthToken());
             connection.setRequestMethod("GET");
-            Log.d("MainActivity", connection.getResponseCode() + "");
+            Log.d("PerformSearchTask", connection.getResponseCode() + "");
             BufferedReader rd = new BufferedReader(new InputStreamReader(connection.getInputStream()));
             String content = "";
             String line = null;
@@ -26,7 +28,12 @@ class PerformSearchTask extends AsyncTask<String, Integer, String> {
                 content += line + "\n";
             }
 
-            return content;
+            int uriIndex = content.indexOf("spotify:track");
+            String uri = content.substring(uriIndex, content.indexOf("\"", uriIndex));
+
+            MainActivity.setSpotifyURI(uri);
+
+            return uri;
 
         } catch (Exception e) {
             StringWriter sw = new StringWriter();
