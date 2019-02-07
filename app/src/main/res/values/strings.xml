@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Play Spotify</string>
+    <string name="next_label">Next</string>
 </resources>

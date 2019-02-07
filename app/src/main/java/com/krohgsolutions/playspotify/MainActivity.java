@@ -24,8 +24,11 @@ public class MainActivity extends AppCompatActivity {
     private SpotifyAppRemote mSpotifyAppRemote;
     // Request code will be used to verify if result comes from the login activity. Can be set to any integer.
     private static final int REQUEST_CODE = 1337;
-    private static String AUTH_TOKEN = null;
-    private static String spotifyURI = null;
+    private static String AUTH_TOKEN;
+    private static String spotifyURI;
+    private static String CURRENT_TITLE;
+    private static String CURRENT_ARTIST;
+    private static String CURRENT_ALBUM;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,11 +72,17 @@ public class MainActivity extends AppCompatActivity {
                                     @Override
                                     public void onEvent(PlayerState playerState) {
                                         final Track track = playerState.track;
-                                        if (track != null) {
+                                        if (track != null && !track.name.equalsIgnoreCase(CURRENT_TITLE)) {
+                                            CURRENT_TITLE = track.name;
+                                            CURRENT_ARTIST = track.artist.name;
+                                            CURRENT_ALBUM = track.album.name;
                                             Log.d("MainActivity", track.name + " by " + track.artist.name);
-                                            ((TextView)findViewById(R.id.title)).setText(track.name);
-                                            ((TextView)findViewById(R.id.artist)).setText(track.artist.name);
+                                            ((TextView) findViewById(R.id.title)).setText(CURRENT_TITLE);
+                                            ((TextView) findViewById(R.id.artist)).setText(CURRENT_ARTIST);
+                                            ((TextView) findViewById(R.id.album)).setText(CURRENT_ALBUM);
                                         }
+
+                                        // TODO Figure out how to tell when a song ends to trigger another random one, not play related
                                     }
                                 });
 
