@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.TextView;
 
 import com.spotify.android.appremote.api.ConnectionParams;
 import com.spotify.android.appremote.api.Connector;
@@ -61,6 +62,21 @@ public class MainActivity extends AppCompatActivity {
                         mSpotifyAppRemote = spotifyAppRemote;
                         Log.d("MainActivity", "Connected to Player");
 
+                        // Subscribe to PlayerState
+                        mSpotifyAppRemote.getPlayerApi()
+                                .subscribeToPlayerState()
+                                .setEventCallback(new Subscription.EventCallback<PlayerState>() {
+                                    @Override
+                                    public void onEvent(PlayerState playerState) {
+                                        final Track track = playerState.track;
+                                        if (track != null) {
+                                            Log.d("MainActivity", track.name + " by " + track.artist.name);
+                                            ((TextView)findViewById(R.id.title)).setText(track.name);
+                                            ((TextView)findViewById(R.id.artist)).setText(track.artist.name);
+                                        }
+                                    }
+                                });
+
                         new PerformSearchTask().execute("");
                     }
 
@@ -86,6 +102,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onStop() {
         super.onStop();
+        SpotifyAppRemote.disconnect(mSpotifyAppRemote);
     }
 
     @Override
