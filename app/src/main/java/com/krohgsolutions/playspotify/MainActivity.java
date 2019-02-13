@@ -17,6 +17,9 @@ import com.spotify.sdk.android.authentication.AuthenticationRequest;
 import com.spotify.sdk.android.authentication.AuthenticationResponse;
 import com.spotify.sdk.android.authentication.AuthenticationClient;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class MainActivity extends AppCompatActivity {
 
     private static final String CLIENT_ID = "fee2c0b9aebc4e4a838507645af61f25";
@@ -25,7 +28,7 @@ public class MainActivity extends AppCompatActivity {
     // Request code will be used to verify if result comes from the login activity. Can be set to any integer.
     private static final int REQUEST_CODE = 1337;
     private static String AUTH_TOKEN;
-    private static String spotifyURI;
+    private static List<String> spotifyURIs = new ArrayList<>();
     private static String CURRENT_TITLE;
     private static String CURRENT_ARTIST;
     private static String CURRENT_ALBUM;
@@ -86,6 +89,20 @@ public class MainActivity extends AppCompatActivity {
                                     }
                                 });
 
+                        //Build Initial Queue
+                        new PerformSearchTask().execute("");
+                        new PerformSearchTask().execute("");
+                        new PerformSearchTask().execute("");
+                        new PerformSearchTask().execute("");
+                        new PerformSearchTask().execute("");
+
+                        for (String uri : spotifyURIs) {
+                            spotifyURIs.remove(uri);
+                            mSpotifyAppRemote.getPlayerApi().queue(uri);
+                        }
+
+                        mSpotifyAppRemote.getPlayerApi().resume();
+
                         new PerformSearchTask().execute("");
                     }
 
@@ -100,10 +117,16 @@ public class MainActivity extends AppCompatActivity {
 
     protected static String getAuthToken() { return AUTH_TOKEN; }
 
-    protected static void setSpotifyURI(String uri) {spotifyURI = uri;}
+    protected static void addSpotifyURIToQueue(String uri) {spotifyURIs.add(uri);}
 
     public void playNextRandomSong(View v) {
-        mSpotifyAppRemote.getPlayerApi().play(spotifyURI);
+
+        if (spotifyURIs.size() > 0) {
+            String uri = spotifyURIs.remove(0);
+            mSpotifyAppRemote.getPlayerApi().queue(uri);
+        }
+
+        mSpotifyAppRemote.getPlayerApi().skipNext();
 
         new PerformSearchTask().execute("");
     }

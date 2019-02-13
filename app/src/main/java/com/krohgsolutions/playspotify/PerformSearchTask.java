@@ -15,8 +15,14 @@ class PerformSearchTask extends AsyncTask<String, Integer, String> {
     protected String doInBackground(String... urls) {
         try {
             Log.d("PerformSearchTask","Executing Search for Random Track");
-            int offset = new Random().nextInt(10000);
-            URL url = new URL("https://api.spotify.com/v1/search/?q=name:*&type=track&market=from_token&limit=1&offset=" + offset);
+            Random r = new Random();
+            int offset = r.nextInt(9950);
+            int randomCharOffset = r.nextInt(26);
+            //add ASCII
+            char randomChar = (char)(randomCharOffset + 97);
+            Log.d("PerformSearchTask", "xi = " + randomCharOffset + " , x = " + randomChar);
+
+            URL url = new URL("https://api.spotify.com/v1/search/?q=" + randomChar + "*&type=track&market=from_token&limit=50&offset=" + offset);
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             connection.setRequestProperty ("Authorization", "Bearer " + MainActivity.getAuthToken());
             connection.setRequestMethod("GET");
@@ -28,10 +34,15 @@ class PerformSearchTask extends AsyncTask<String, Integer, String> {
                 content += line + "\n";
             }
 
-            int uriIndex = content.indexOf("spotify:track");
-            String uri = content.substring(uriIndex, content.indexOf("\"", uriIndex));
+            int resultIndex = r.nextInt(50);
 
-            MainActivity.setSpotifyURI(uri);
+            for (int i = 0; i <= resultIndex; i++) {
+                content = content.substring(content.indexOf("spotify:track"));
+            }
+
+            String uri = content.substring(0, content.indexOf("\""));
+
+            MainActivity.addSpotifyURIToQueue(uri);
 
             return uri;
 
