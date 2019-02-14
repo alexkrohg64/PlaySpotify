@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">Play Spotify</string>
-    <string name="next_label">Next</string>
+    <string name="play_button_desc">Play/Pause</string>
+    <string name="next_button_desc">Play Next Song</string>
 </resources>

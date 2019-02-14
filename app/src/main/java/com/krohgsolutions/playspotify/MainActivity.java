@@ -84,8 +84,6 @@ public class MainActivity extends AppCompatActivity {
                                             ((TextView) findViewById(R.id.artist)).setText(CURRENT_ARTIST);
                                             ((TextView) findViewById(R.id.album)).setText(CURRENT_ALBUM);
                                         }
-
-                                        // TODO Figure out how to tell when a song ends to trigger another random one, not play related
                                     }
                                 });
 
@@ -100,8 +98,6 @@ public class MainActivity extends AppCompatActivity {
                             spotifyURIs.remove(uri);
                             mSpotifyAppRemote.getPlayerApi().queue(uri);
                         }
-
-                        mSpotifyAppRemote.getPlayerApi().resume();
 
                         new PerformSearchTask().execute("");
                     }
@@ -129,6 +125,30 @@ public class MainActivity extends AppCompatActivity {
         mSpotifyAppRemote.getPlayerApi().skipNext();
 
         new PerformSearchTask().execute("");
+
+        //TODO: Below is for testing to get AlarmManager to work
+        /*Context context = this.getApplicationContext();
+
+        AlarmManager am = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
+
+        Intent i = new Intent(context, SpotifyAlarmHelper.class);
+        PendingIntent pi = PendingIntent.getBroadcast(context, 0, i, 0);
+
+        am.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 10000, pi);*/
+    }
+
+    public void playButtonClicked(View v) {
+        mSpotifyAppRemote.getPlayerApi().resume();
+
+        findViewById(R.id.playButton).setVisibility(View.INVISIBLE);
+        findViewById(R.id.pauseButton).setVisibility(View.VISIBLE);
+    }
+
+    public void pauseButtonClicked(View v) {
+        mSpotifyAppRemote.getPlayerApi().pause();
+
+        findViewById(R.id.pauseButton).setVisibility(View.INVISIBLE);
+        findViewById(R.id.playButton).setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -165,4 +185,12 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     }
+
+    //TODO: Figure out how to get AlarmManager working
+    /*public class SpotifyAlarm extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            mSpotifyAppRemote.getPlayerApi().skipNext();
+        }
+    }*/
 }

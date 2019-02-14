@@ -8,4 +8,13 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="PlayButtonStyle">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginStart">140dp</item>
+        <item name="android:layout_marginTop">400dp</item>
+        <item name="android:layout_marginEnd">183dp</item>
+        <item name="android:layout_marginBottom">145dp</item>
+    </style>
+
 </resources>

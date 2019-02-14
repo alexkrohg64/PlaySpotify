@@ -6,22 +6,23 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <Button
-        android:id="@+id/button4"
+    <ImageButton
+        android:id="@+id/pauseButton"
+        style="@style/PlayButtonStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="140dp"
-        android:layout_marginTop="400dp"
-        android:layout_marginEnd="183dp"
-        android:layout_marginBottom="145dp"
-        android:onClick="playNextRandomSong"
-        android:text="@string/next_label"
+        android:layout_marginStart="178dp"
+        android:layout_marginTop="147dp"
+        android:layout_marginEnd="178dp"
+        android:layout_marginBottom="158dp"
+        android:contentDescription="@string/play_button_desc"
+        android:onClick="pauseButtonClicked"
+        android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0" />
+        app:layout_constraintTop_toBottomOf="@+id/album"
+        app:srcCompat="@android:drawable/ic_media_pause" />
 
     <TextView
         android:id="@+id/title"
@@ -45,8 +46,6 @@
         android:layout_marginStart="100dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="48dp"
-        android:layout_marginBottom="135dp"
-        app:layout_constraintBottom_toTopOf="@+id/button4"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/title" />
@@ -58,9 +57,41 @@
         android:layout_marginStart="92dp"
         android:layout_marginTop="41dp"
         android:layout_marginEnd="63dp"
-        android:layout_marginBottom="79dp"
-        app:layout_constraintBottom_toTopOf="@+id/button4"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/artist" />
+
+    <ImageButton
+        android:id="@+id/playButton"
+        style="@style/PlayButtonStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="178dp"
+        android:layout_marginTop="147dp"
+        android:layout_marginEnd="178dp"
+        android:layout_marginBottom="158dp"
+        android:contentDescription="@string/play_button_desc"
+        android:onClick="playButtonClicked"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/album"
+        app:srcCompat="@android:drawable/ic_media_play" />
+
+    <ImageButton
+        android:id="@+id/imageButton2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="50dp"
+        android:layout_marginTop="146dp"
+        android:layout_marginEnd="72dp"
+        android:layout_marginBottom="159dp"
+        android:contentDescription="@string/next_button_desc"
+        android:onClick="playNextRandomSong"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/pauseButton"
+        app:layout_constraintTop_toBottomOf="@+id/album"
+        app:srcCompat="@android:drawable/ic_media_next" />
+
 </android.support.constraint.ConstraintLayout>
